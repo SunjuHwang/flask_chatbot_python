@@ -45,16 +45,19 @@ def message():
         img_bool =True
         url = "https://api.thecatapi.com/v1/images/search?mime_types=jpg"
         req = requests.get(url).json()
-        cat_url = (req[0]['url'])
+        return_msg = "나만 고양이 없어....ㅠ"
+        img_url = (req[0]['url'])
+    elif msg == "영화":
+        
     else:
         return_msg = "현재 메뉴만 지원합니다 :)"
         
     if img_bool ==True: 
         json_return = {
             "message":{
-                "text": "나만 고양이 없어....ㅜㅜ",
+                "text": return_msg,
                 "photo" : {
-                    "url":cat_url,
+                    "url":img_url,
                     "width": 720,
                     "height":640
                 }
