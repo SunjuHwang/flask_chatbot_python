@@ -9,6 +9,7 @@ doc = BeautifulSoup(req,'html.parser')
 title_tag = doc.select('dt.tit > a')
 star_tag = doc.select('div.star_t1 > a > span.num')
 reserve_tag = doc.select('div.star_t1.b_star > span.num')
+img_tag = doc.select('div.thumb > a > img')
 
 #순위 형태와 함께 dic형태로 만들기
 movie_dic = {}
@@ -16,13 +17,12 @@ for i in range(0,10):
     movie_dic[i] = {
         "title":title_tag[i].text,
         "star":star_tag[i].text,
-        "reserve": reserve_tag[i].text
-        
+        "reserve": reserve_tag[i].text,
+        "img" : img_tag[i].get('src')
     }
 
 pick_movie = movie_dic[random.randrange(0,10)]
 
-https://movie-phinf.pstatic.net/20180730_82/15329286640280Wu1t_JPEG/movie_image.jpg?type=m99_141_2
 
 # return_doc_movies = doc.select('dt.tit > a')
 #list_movies = []
