@@ -3,6 +3,7 @@ import os
 #json으로 바꾸기 위해 라이브러리 추가 
 import json
 import random
+import requests
 
 
 app = Flask(__name__)
@@ -28,27 +29,51 @@ def keyboard():
 def message():
     # content라는 key의 value를 msg에 저장
     msg = request.json['content']
+    img_bool = False
     
     if msg == "메뉴":
-        menu = ["20층", "멀캠식당", "꼭대기", "급식"]
+        menu = ["스시", "파스타", "피자", "돌솥비빔밥","회덮밥", "백반", "분식", "양꼬치", "짬짜면"]
         return_msg = random.choice(menu)
     elif msg == "로또":
+        # 1~45 리스트 
         numbers = list(range(1,46))
+        # 6개 샘플링
         pick = random.sample(numbers,6)
+        # 정렬 후 String으로 변환하여 저장
         return_msg = str(sorted(pick))
+    elif msg == "고양이":
+        img_bool =True
+        url = "https://api.thecatapi.com/v1/images/search?mime_types=jpg"
+        req = requests.get(url).json()
+        cat_url = (req[0]['url'])
     else:
         return_msg = "현재 메뉴만 지원합니다 :)"
         
-    
-    json_return = {
-        "message":{
-            "text": return_msg
-        },
-        "keyboard": {
+    if img_bool ==True: 
+        json_return = {
+            "message":{
+                "text": "나만 고양이 없어....ㅜㅜ",
+                "photo" : {
+                    "url":cat_url,
+                    "width": 720,
+                    "height":640
+                }
+            },
+            "keyboard": {
                     "type" : "buttons",
                     "buttons" : ["메뉴", "로또", "고양이", "영화"]
-                    }
-    }
+                        }
+        }
+    else: 
+         json_return = {
+            "message":{
+                "text": return_msg
+            },
+            "keyboard": {
+                    "type" : "buttons",
+                    "buttons" : ["메뉴", "로또", "고양이", "영화"]
+                        }
+        }
     return jsonify(json_return)
-                    
+                        
 app.run(host=os.getenv('IP', '0.0.0.0'),port=int(os.getenv('PORT', 8080)))
