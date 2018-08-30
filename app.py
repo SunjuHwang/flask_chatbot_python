@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import os
 #json으로 바꾸기 위해 라이브러리 추가 
 import json
+import random
 
 
 app = Flask(__name__)
@@ -27,9 +28,21 @@ def keyboard():
 def message():
     # content라는 key의 value를 msg에 저장
     msg = request.json['content']
+    
+    if msg == "메뉴":
+        menu = ["20층", "멀캠식당", "꼭대기", "급식"]
+        return_msg = random.choice(menu)
+    elif msg == "로또":
+        numbers = list(range(1,46))
+        pick = random.sample(numbers,6)
+        return_msg = str(sorted(pick))
+    else:
+        return_msg = "현재 메뉴만 지원합니다 :)"
+        
+    
     json_return = {
         "message":{
-            "text": msg
+            "text": return_msg
         },
         "keyboard": {
                     "type" : "buttons",
